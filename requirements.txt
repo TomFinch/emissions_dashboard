@@ -1,0 +1,6 @@
+streamlit==1.27.1
+pandas
+numpy
+plotly_express
+geopandas
+PIL
