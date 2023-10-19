@@ -72,13 +72,15 @@ with st.sidebar:
     plot_height = st.slider('Specify plot height', 300, 600, 450)
 
 # Data Visualization
+# Cities with the highest emission
+st.markdown(f'### Cities with the highest emission in {Year}')
+df1 = df.query('`Reference Year` == @Year')
+
 # Top 5 Cities with the highest emission
-province_emissions = df.groupby('Facility Province or Territory')['Total Emissions (tonnes CO2e)'].sum().reset_index()
+province_emissions = df1.groupby('Facility Province or Territory')['Total Emissions (tonnes CO2e)'].sum().reset_index()
 sorted_provinces = province_emissions.sort_values(by='Total Emissions (tonnes CO2e)', ascending=False)
 top_provinces = sorted_provinces.head(5)
 
-# Cities with the highest emission
-st.markdown('### Cities with the highest emission')
 city_columns = st.columns(5)
 for i in range(5):
     city = top_provinces.iloc[i, 0]
@@ -96,7 +98,7 @@ sorted_cities = city_emissions.sort_values(by='Total Emissions (tonnes CO2e)', a
 top_10_cities = sorted_cities.head(10)
 
 # Create a bar chart for Emissions by City
-with st.expander("##### Emissions by City", expanded=True):
+with st.expander(f"##### Emissions by City in {Year}", expanded=True):
     fig_city = px.bar(
         top_10_cities,
         x='Total Emissions (tonnes CO2e)',
@@ -112,7 +114,7 @@ chart_a, chart_b = st.columns((6,4))
 
 with chart_a:
     # Create the choropleth_mapbox for "Emission by Province" with Year as the only impacting factor
-    with st.expander("##### Emission by Province", expanded=True):
+    with st.expander(f"##### Emission by Province in {Year}", expanded=True):
         if Year not in df['Reference Year'].unique():
             st.warning("Select a valid year from the dropdown.")
         else:
@@ -148,7 +150,7 @@ with chart_a:
             st.plotly_chart(fig_province, use_container_width=True)
 
 with chart_b:
-    st.write("##### Ratio of Emissions by Facility Type")
+    st.write(f"##### Ratio of Emissions by Facility Type in {Year}")
 
     df1 = df.query('`Reference Year` == @Year')
     # Calculate total emissions by Facility Type
