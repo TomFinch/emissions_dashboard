@@ -4,4 +4,3 @@ numpy
 plotly_express
 geopandas
 requests
-io
